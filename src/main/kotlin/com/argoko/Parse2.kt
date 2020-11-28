@@ -70,15 +70,15 @@ fun main() {
     println("${x}")
     println( x.layouts?.map { it.theLayout } )
 
-    fun getTuple(name : String, parent : String) : Pair<String,String> {
-        val (parent,subComponent) = s.split(".")
+    fun getTuple(name : String, parent : String): Pair<String, Pair<String, String>> {
+        val (parent,subComponent) = name.split(".")
         return parent to ( subComponent to name )
     }
 
-    val children : List<Pair<String,Pair<String,String>>> =
+/*    val children : List<Pair<String,Pair<String,String>>> =
         (x.labels?.map { getTuple(it.name, it.parent) } ?: emptyList()) +
                 (x.panels?.map { getTuple(it.name, it.parent) } ?: emptyList()) +
-            x.textfields.map { getTuple(it.parent) }
+            x.textfields.map { getTuple(it.parent) }*/
 
 
 }

@@ -25,46 +25,46 @@ data class Gbc(
     }
 }
 
-fun parseLayout(s: String, mutator : GridBagConstraints.() -> Unit ) =
-    s.lines().let { lines ->
-        lines
-            .also { println( it.groupBy { it.length}) }
-            .map { it.length }
-            .toSet()
-            .also { println("Set size is $it") }
-            .let { it.singleOrNull() ?: error("Need to have all lines same size") }
-            .also { println("Size is $it") }
-            .let { Pair(lines, it) }
-    }.let { (lines, size) ->
-        lines.withIndex().flatMap { (y, line) ->
-            (0 until size).map { x ->
-                line[x].let {
-                    if (it != ' ') it to Point(x, y) else null
-                }
-            }.filterNotNull()
-        }
-    }.groupBy { it.first }
-        .mapValues { it.value.map { it.second } }
-        .mapValues {
-            it.value.let { ps ->
-                Pair(
-                    ps.sortedBy { it.x }.let { it.first().x..it.last().x },
-                    ps.sortedBy { it.y }.let { it.first().y..it.last().y })
-                    .let { (xs, ys) ->
-                        xs.forEach { x ->
-                            ys.forEach { y ->
-                                val p = Point(x, y)
-                                require(p in ps) { "Point $p missing" }
+fun parseLayout(s: String, mutator: GridBagConstraints.() -> Unit) =
+    s
+        .lines()
+        .let { lines ->
+            lines
+                .map { it.length }
+                .toSet()
+                .singleOrNull()
+                ?.let { sz ->
+                    lines.withIndex().flatMap { (y, line) ->
+                        (0 until sz).map { x ->
+                            line[x].let {
+                                if (it != ' ') it to Point(x, y) else null
                             }
-                        }
-                        Gbc(
-                            xs.first(),
-                            ys.first(),
-                            xs.last() - xs.first() + 1, ys.last() - ys.first() + 1
-                        ).toGbc().apply { mutator() }
+                        }.filterNotNull()
                     }
-            }
+                } ?: error("Need all lines same length")
         }
+        .groupBy { it.first }
+        .mapValues { it.value.map { it.second } }
+        .mapValues { (c, ps) ->
+            Pair(
+                ps.sortedBy { it.x }.let { it.first().x..it.last().x },
+                ps.sortedBy { it.y }.let { it.first().y..it.last().y })
+                .let { (xs, ys) ->
+                    xs.forEach { x ->
+                        ys.forEach { y ->
+                            val p = Point(x, y)
+                            require(p in ps) { "Point $p missing" }
+                        }
+                    }
+                    Gbc(
+                        xs.first(),
+                        ys.first(),
+                        xs.last() - xs.first() + 1,
+                        ys.last() - ys.first() + 1
+                    ).toGbc().apply { mutator() }
+                }
+        }
+
 
 fun main() {
     val s = """
@@ -82,13 +82,13 @@ fun main() {
     """.trimIndent().let { parseLayout(it) { weighty = 0.0; weightx = 0.0 } }
 
     println(x)
-    val colours = listOf(Color.RED, Color.GREEN, Color.BLUE, Color.CYAN, Color.MAGENTA, Color.YELLOW, Color.PINK, Color.ORANGE)
+    val colours =
+        listOf(Color.RED, Color.GREEN, Color.BLUE, Color.CYAN, Color.MAGENTA, Color.YELLOW, Color.PINK, Color.ORANGE)
     SwingUtilities.invokeLater {
         val (parent, components) = JFrame("Woot").run {
-            size = Dimension(800,200)
+            size = Dimension(800, 200)
             layout = GridBagLayout()
-            val ret = x.entries.zip(colours).associate {
-                (c_gbc, color) ->
+            val ret = x.entries.zip(colours).associate { (c_gbc, color) ->
                 c_gbc.key to JPanel().apply {
                     background = color
                     layout = GridBagLayout()
@@ -107,7 +107,7 @@ fun main() {
         JPanel().apply {
             layout = GridBagLayout()
             l2.forEach { (c, gbc) ->
-                if ( c in 'A'..'D' || c in 'a'..'d') {
+                if (c in 'A'..'D' || c in 'a'..'d') {
                     if (c.isUpperCase()) {
                         add(JLabel("$c").apply { preferredSize = Dimension(150, 24) }, gbc)
                     } else {
@@ -115,11 +115,11 @@ fun main() {
                     }
                 } else {
                     println("Special case ! $gbc")
-                    add(JPanel(), gbc.apply { weightx = 1.0; weighty = 1.0; } )
+                    add(JPanel(), gbc.apply { weightx = 1.0; weighty = 1.0; })
                 }
             }
             background = Color.PINK
-            parent.add(this, x['T']?.apply { weightx = 0.0; weighty = 0.0;})
+            parent.add(this, x['T']?.apply { weightx = 0.0; weighty = 0.0; })
             parent.pack()
         }
     }
