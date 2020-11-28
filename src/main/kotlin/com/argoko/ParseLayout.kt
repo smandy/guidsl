@@ -69,8 +69,8 @@ fun parseLayout(s: String, mutator: GridBagConstraints.() -> Unit) =
 fun main() {
     val s = """
         TTTTTT
-        AAACDF
-        BBBCEF
+        AACCDF
+        HBCCEF
         GGGGGF
     """.trimIndent()
     val x = parseLayout(
