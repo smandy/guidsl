@@ -1,5 +1,63 @@
-!!com.argoko.Layout
+# Document. Jackson doesn't support multiple documents in a file.
+# Bleuch
+---
+
+frame:
+    name: mainFrame
+    dim:
+      width: 200
+      height: 100
+    layout: |-
+      AAAAAAAAA
+      DDEEFFGGL
+      HHIIJJKKL
 
 layouts:
-  foo: { name: Bar }
-  goo: { name: Goo }
+  - name: titleBar
+    parent: mainFrame.A
+    layout: |-
+      AaBbCcE
+  - name: sideBar
+    parent: mainFrame.L
+    layout: |-
+      A
+      C
+      B
+
+panels:
+  - name: spacer1
+    parent: sideBar.B
+    background: GREEN
+
+buttons:
+  - name: cmdApply
+    parent: sideBar.A
+    text: APPLY
+  - name: cmdEdit
+    parent: sideBar.A
+    text: EDIT
+
+labels:
+  - parent: titleBar.A
+    name: lblWorkspace
+    text: Workspace
+  - parent: titleBar.B
+    name: lblTimeZone
+    text: TimeZone
+
+textfields:
+  - parent: titleBar.a
+    name: txtWorkSpace
+    text: xx
+  - parent: titleBar.b
+    name: txtTimeZone
+    text: xx
+
+constraints:
+  main:
+    gridwidth: 100
+    gridheight: 200
+  sub:
+  titleBar.E:
+...
+

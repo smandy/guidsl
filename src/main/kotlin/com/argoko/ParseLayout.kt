@@ -28,8 +28,10 @@ data class Gbc(
 fun parseLayout(s: String, mutator : GridBagConstraints.() -> Unit ) =
     s.lines().let { lines ->
         lines
+            .also { println( it.groupBy { it.length}) }
             .map { it.length }
             .toSet()
+            .also { println("Set size is $it") }
             .let { it.singleOrNull() ?: error("Need to have all lines same size") }
             .also { println("Size is $it") }
             .let { Pair(lines, it) }
