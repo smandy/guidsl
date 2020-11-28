@@ -1,0 +1,24 @@
+!!com.argoko.Layout
+
+# Example
+
+Doit:
+  - An example
+  - Another example
+
+items:
+  - this
+  - is
+  - an
+  - example
+
+
+layouts:
+  main:
+    weightx: 1.0
+    weighty: 1.0
+
+foo: >
+  this
+  is text that will keep doing
+...

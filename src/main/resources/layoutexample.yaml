@@ -1,0 +1,5 @@
+!!com.argoko.Layout
+
+layouts:
+  foo: { name: Bar }
+  goo: { name: Goo }
